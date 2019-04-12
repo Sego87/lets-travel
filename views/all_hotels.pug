@@ -1,0 +1,10 @@
+extends layout
+include mixins/_hotel.pug
+
+block content
+    
+        .hotel_wrapper
+            +hotel
+
+        //- p= name
+        //- //- now if the route is /all/Sego87 after the hotel mixin I can read a paragraph Sego87 (check the routing in index.js)

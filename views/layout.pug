@@ -1,0 +1,61 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    //- header(style={display: "flex", color: grey})
+    header
+      nav
+        a(href="/")
+          img#logo(src="/images/logo.png")
+        ul
+          li
+            a(href="/sign-up") sign up
+          li
+            a(href="/login") login
+
+      .search_nav
+        form
+          .input_wrapper
+            label(for="destination") Destination
+            input(type="text", id="destination", name="destination" required)
+          .input_wrapper
+            label(for="duration") Duration (nights)
+            input(type="number", id="duration", name="duration" required)
+          .input_wrapper
+            label(for="departure-date") Departure date
+            input(type="date", id="departure-date", name="dateOfDeparture" required)
+          .input_wrapper
+            label(for="number-guests") Number of guests
+            input(type="number", id="number-guests", name="numberOfGuests" required)
+
+          .input_wrapper
+            select(name="stars")
+              option(value="1") Min 1 star
+              option(value="2") Min 2 star
+              option(value="3") Min 3 star
+              option(value="4") Min 4 star
+              option(value="5") Min 5 star
+
+          .input_wrapper
+            select(name="sort")
+              option(value="1") Price: Low - High
+              option(value="-1") Price: High - Low
+
+          .input_wrapper
+            button(type="submit") SEARCH!
+
+      img(src="/images/beach.jpg")
+
+      //- h1 Let's Travel
+      //- div(id="extraSpace" style={flex:1})
+      //- div(id="login")
+      //-   a(href="") sign up
+      //-   a(href="") log in
+    //- p above the content
+    block content
+    //- p below the content
+    //- this file doesn't have the "extends layout" at the top beacause this is the main template (indeed it is called "layout", which will be extended with other files). Everything in the "block content" will be pasted from other pug files that extend this main file
+    //- #idName is used tu set an id for the object (see #logo)
+    //- .search_nav automatically creates a div with a class called "search_nav"

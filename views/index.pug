@@ -1,0 +1,31 @@
+extends layout
+include mixins/_hotel.pug
+
+block content
+
+  .outer_wrapper
+    .hotel_wrapper
+      h2 Hotels
+        a(href="/all") (see all):
+      
+      +hotel
+      //- with include mixins/_hotel.pug we are telling it to use also the template file _hotel.pug in the folder mixins. with +hotel we are telling it to use the mixin called hotel
+
+      
+
+  //- h1= title
+  //- //- the content of title has been taken from the index.js in- res.render('index', { title: 'Express' }); -so when you put a = after the name of the html tag you are using javascript
+  //- p Welcome to let's travel
+  //- img(src="images/beach.jpg")
+
+  //- - const name = "Mike"
+  //- - const foods = ["cheese", "eggs", "chicken"]
+
+  //- div
+  //-   h1 Title
+  //-   h2= name
+  //-   a(href="https://www.google.com" class="button") Link to Google
+    
+  //-   ul
+  //-     each food in foods
+  //-       li= "I love " + food
