@@ -3,18 +3,26 @@ var express = require('express');
 var router = express.Router();
 //- we have just used the express.Router() instance stored in a variable
 
+// require controllers:
+const hotelController = require('../controllers/hotelController'); // we required the usage of the hotelController.js (the name of the const hotelController has to be exactly the name of our file in which we stored the route)
+
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+
+router.get('/', hotelController.homePage); // it runs the function homePage in the file hotelController.js
+
+router.get('/all', hotelController.listAllHotels); // sameof above but with listAllHotels
+
+/* router.get('/', function(req, res, next) {
+  // res.render('index', { title: 'Express' }); // we moved this route to the hotelController
   // res.send("hello mike"); // to reload the server we have to run npm start from the terminal (the root of our project),comment out the line above to try
-});
+}); */
 //- req is request and res is response (these names could be anything)
 //- request is an object which contains all the information from the http request (for example we can use it to access data from within the form. response is the sent back data from the server)
 
-router.get('/all', function(req, res) {
+/* router.get('/all', function(req, res) {
   res.render('all_hotels', { title: 'All Hotels' });
   //- we want to render the file called all_hotels.pug, the object {title: 'All Hotels'} is to set the title of the document
-})
+}) */
 //- router.get('/all', function(req, res) we want to apply this to the"/all" route
 
 // router.get('/all/:name', function(req, res) {
