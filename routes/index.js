@@ -12,6 +12,9 @@ router.get('/', hotelController.homePage); // it runs the function homePage in t
 
 router.get('/all', hotelController.listAllHotels); // sameof above but with listAllHotels
 
+router.get('/sign-up', hotelController.signUp, hotelController.logIn); // see middleware example in hotelController. We can pass as many as of these as we want to use, they will be run in sequence (each one of them calling the next one, needs the "next" as a parameter of the function and that parameter will be the next funtion run)
+router.get('/login', hotelController.logIn); // this is for when a user wants to log in after beign logged out
+
 /* router.get('/', function(req, res, next) {
   // res.render('index', { title: 'Express' }); // we moved this route to the hotelController
   // res.send("hello mike"); // to reload the server we have to run npm start from the terminal (the root of our project),comment out the line above to try
