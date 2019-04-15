@@ -12,7 +12,7 @@ const hotelSchema = new mongoose.Schema({
         type: String,
         required: 'Hotel description is required',
         trim: true
-    }
+    },
     image: String, // to be fixed later on in the course
     star_rating: {
         type: Number,
