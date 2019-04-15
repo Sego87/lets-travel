@@ -5,6 +5,7 @@ block content
         button(type="button" class="button_small") Back to admin
     h2= title
 
+    //- this form is set up to make a POST request. This will post our data so we can use it in our controller. The action is empty, so this it will post our data to the current route (in this case '/admin/add').
     form(action="" method="POST")
         .form_input
             label(for="hotel_name") Hotel name:

@@ -1,3 +1,5 @@
+const Hotel = require('../models/hotel'); // we require to use the 'Hotel' model in the hotel.js model file
+
 exports.homePage = (req, res) => { // exports allows this code to be available in another part of the application. homePage is the name that we decided for the function to be exported
     res.render('index', { title: 'Lets travel' });
 }
@@ -16,6 +18,13 @@ exports.adminPage = (req, res) => {
 
 exports.createHotelGet = (req, res) => {
     res.render('add_hotel', { title: 'Add new Hotel' });
+}
+
+exports.createHotelPost = async (req, res) => { // with async we mark this function as an async function (it is called async await,it allows us to work with asyncronous code). It allows us to parse a function until a line of code has finished running
+    // first thing we want to check what kind of data has been sent by the form, we can do it by using res.json to output the data as json.
+    // res.json(req.body);
+    const hotel = new Hotel(req.body); // We created a new 'Hotel' passing in the date from the req.body (where we have the data stored)
+    await hotel.save(); // with hotel.save() we want to make sure that that the hotel has finished saving, if worked we can start doing things with it. Adding await before this line we make sure this code parses and then wait this to finish before moving on to the next line. We want to make sure we await the hotel saving before moving on because we will soon use this data immediately after the save. Basically we want to make sure that the save has been completed and it is available before calling anymore lines of code which need this hotel data
 }
 
 /* MIDDLEWARE EXAMPLE */
