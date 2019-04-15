@@ -44,6 +44,7 @@ router.get('/login', hotelController.logIn); // this is for when a user wants to
 module.exports = router;
 // after installing nodemon it will appear as a new devDependency in the package.json
 // in order to make nodemon work I create a new script in package.json right below "start" and I call it "devstart", then the related command is "nodemon ./bin/www"
+// to start correctly nodemon and the autoupdate of the server type in the console in your root: npm run devstart
 // index.pug is the main homepage template
 // a template is a mix of html javascript along with any dynamic data mixed in. we need a template language to put this in html, that's why we used pug
 // in pug indentation is really important for the nesting
