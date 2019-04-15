@@ -10,7 +10,7 @@ const hotelController = require('../controllers/hotelController'); // we require
 
 router.get('/', hotelController.homePage); // it runs the function homePage in the file hotelController.js
 
-router.get('/all', hotelController.listAllHotels); // sameof above but with listAllHotels
+router.get('/all', hotelController.listAllHotels); // same of above but with listAllHotels
 
 /* 
 router.get('/sign-up', hotelController.signUp, hotelController.logIn); // see middleware example in hotelController. We can pass as many as of these as we want to use, they will be run in sequence (each one of them calling the next one, needs the "next" as a parameter of the function and that parameter will be the next funtion run)
@@ -41,7 +41,12 @@ router.get('/login', hotelController.logIn); // this is for when a user wants to
 //   res.render('all_hotels', { title: 'All Hotels', name }); // I can paste to the template all the data that I want within { data1, data2, data3, ... }
 // })
 
+// ADMIN Routes
+router.get('/admin', hotelController.adminPage);
+router.get('/admin/add', hotelController.createHotelGet);
+
 module.exports = router;
+
 // after installing nodemon it will appear as a new devDependency in the package.json
 // in order to make nodemon work I create a new script in package.json right below "start" and I call it "devstart", then the related command is "nodemon ./bin/www"
 // to start correctly nodemon and the autoupdate of the server type in the console in your root: npm run devstart

@@ -10,6 +10,14 @@ exports.listAllHotels = (req, res) => {
     res.render('all_hotels', { title: 'All Hotels' });
 }
 
+exports.adminPage = (req, res) => {
+    res.render('admin', { title: 'Admin' });
+}
+
+exports.createHotelGet = (req, res) => {
+    res.render('add_hotel', { title: 'Add new Hotel' });
+}
+
 /* MIDDLEWARE EXAMPLE */
 /* 
 exports.signUp = (req, res, next) => { // next inside of the body indicates when we are ready to move on to the next piece of middleware
