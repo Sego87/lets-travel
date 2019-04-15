@@ -11,7 +11,7 @@ exports.listAllHotels = (req, res) => {
 }
 
 /* MIDDLEWARE EXAMPLE */
-
+/* 
 exports.signUp = (req, res, next) => { // next inside of the body indicates when we are ready to move on to the next piece of middleware
     // validate user info
     console.log('sign up middleware');
@@ -22,6 +22,6 @@ exports.logIn = (req, res) => {
     //login
     console.log('login middleware');
 }
-
+ */
 // in general this is what we want when we sign up to a new platform, after signing up we want to be already logged in. So we want to run first the signUp and then the logIn
 // in localhost:3000/sign-up in the console I will se first 'sign up middleware' and then 'login middleware'

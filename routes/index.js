@@ -12,8 +12,10 @@ router.get('/', hotelController.homePage); // it runs the function homePage in t
 
 router.get('/all', hotelController.listAllHotels); // sameof above but with listAllHotels
 
+/* 
 router.get('/sign-up', hotelController.signUp, hotelController.logIn); // see middleware example in hotelController. We can pass as many as of these as we want to use, they will be run in sequence (each one of them calling the next one, needs the "next" as a parameter of the function and that parameter will be the next funtion run)
 router.get('/login', hotelController.logIn); // this is for when a user wants to log in after beign logged out
+ */
 
 /* router.get('/', function(req, res, next) {
   // res.render('index', { title: 'Express' }); // we moved this route to the hotelController
@@ -36,7 +38,7 @@ router.get('/login', hotelController.logIn); // this is for when a user wants to
 //   const name = req.params.name;
 //   //- req.params is to acces to our data in the URL parameters. then we have tu put the name "name" that we chose above (so it becomes req.params.name). then we just stored it inside of a constant called name
 //   //- its data can be paste to the template to use along with the page title
-//   res.render('all_hotels', { title: 'All Hotels', name });
+//   res.render('all_hotels', { title: 'All Hotels', name }); // I can paste to the template all the data that I want within { data1, data2, data3, ... }
 // })
 
 module.exports = router;
