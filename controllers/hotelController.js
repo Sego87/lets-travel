@@ -8,8 +8,14 @@ exports.homePage = (req, res) => { // exports allows this code to be available i
 //we can use middleware in between to change our data or do something with it
 //middleware acts like a series of functions which we pass through (for instance when a user signs up)
 
-exports.listAllHotels = (req, res) => {
-    res.render('all_hotels', { title: 'All Hotels' });
+exports.listAllHotels = async (req, res, next) => { // async is necessary in order to let await work
+    try{
+        const allHotels = await Hotel.find({ available: { $eq:true }}); // we use await to be sure that all the documents inside the Hotel collection (Hotel is the name of the model exported from hotel.js) have been found before moving on to the next line of code (we want to render the  next page after finding all the hotels created). With Hotel.find({ available: { $eq:true }}) we are querying (filtering) the hotels with the available attribute set to true, so the unavailable hotels won't appear in the /all section ($eq checks forequality).
+        res.render('all_hotels', { title: 'All Hotels', allHotels }); // we render all_hotels.pug, pass in the title of the html and pass in the data of the hotels from the database with allHotels
+        /* res.json(allHotels); // this was just to check our data from the database in the json format */
+    } catch(errors) {
+        next(errors);
+    }
 }
 
 exports.adminPage = (req, res) => {
@@ -24,10 +30,10 @@ exports.createHotelPost = async (req, res, next) => { // with async we mark this
     // first thing we want to check what kind of data has been sent by the form, we can do it by using res.json to output the data as json.
     // res.json(req.body);
     try{ // we the put the code inside try because this way we can try to run the code and test for any error
-        const hotel = new Hotel(req.body); // We created a new 'Hotel' passing in the date from the req.body (where we have the data stored)
-        await hotel.save(); // with hotel.save() we want to make sure that that the Hotel has finished saving, if worked we can start doing things with it. Adding await before this line we make sure this code parses and then wait this to finish before moving on to the next line. We want to make sure we await the hotel saving before moving on because we will soon use this data immediately after the save. Basically we want to make sure that the save has been completed and it is available before calling anymore lines of code which need this hotel data    
-        res.redirect(`/all/${hotel._id}`) // now that the hotel has been saved for sure, we want to redirect it to our path /all/ (we used the sintax with `wantedPath${variable._id}` because we add a dynamic data with its unique id provided by the server). Indeed in the browser we should see the url /all/idOfTheHotelCreated, because we waited for the hotel to be created first beforemovingon to redirect (below we should see a not found error because we haven't created that route yet - we will fix this later when we create a template with the full hotel details -)
-    } catch(error) { // if there are any errors we can handlethemwith a catch statement
+        const hotel = new Hotel(req.body); // We created a new 'Hotel' passing in the data from the req.body (where we have the data stored)
+        await hotel.save(); // with hotel.save() we want to make sure that the Hotel has finished saving, if worked we can start doing things with it. Adding await before this line we make sure this code parses and then wait this to finish before moving on to the next line. We want to make sure we await the hotel saving before moving on because we will soon use this data immediately after the save. Basically we want to make sure that the save has been completed and it is available before calling anymore lines of code which need this hotel data    
+        res.redirect(`/all/${hotel._id}`) // now that the hotel has been saved for sure, we want to redirect it to our path /all/ (we used the sintax with `wantedPath${variable._id}` because we add a dynamic data with its unique id provided by the server). Indeed in the browser we should see the url /all/idOfTheHotelCreated, because we waited for the hotel to be created first before moving on to redirect (below we should see a not found error because we haven't created that route yet - we will fix this later when we create a template with the full hotel details -)
+    } catch(error) { // if there are any errors we can handle them with a catch statement
         next(error); // calling next and passing in the error,we will pass the error along a middleware chain until it reaches an error handler which can deal with it correctly. (we alredy have an error handler within the express framework insideofour app.js - see error handler in app.js -)
     }
 } // if everything is ok now we should have our hotel saved in the database (it also has his unique id if everything works fine, its id is a proof that we can now use it for the next line of code)
@@ -46,4 +52,4 @@ exports.logIn = (req, res) => {
 }
  */
 // in general this is what we want when we sign up to a new platform, after signing up we want to be already logged in. So we want to run first the signUp and then the logIn
-// in localhost:3000/sign-up in the console I will se first 'sign up middleware' and then 'login middleware'
+// in localhost:3000/sign-up in the console I will see first 'sign up middleware' and then 'login middleware'
