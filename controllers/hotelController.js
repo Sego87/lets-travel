@@ -94,6 +94,26 @@ exports.editRemovePost = async (req, res, next) => {
     }
 }
 
+exports.updateHotelGet = async (req, res, next) => {
+    try {
+        const hotel = await Hotel.findOne({ _id: req.params.hotelId })
+        // res.json(hotel)
+        res.render('add_hotel', { title: 'Update Hotel', hotel })
+    } catch(error) {
+        next(error)
+    }
+}
+
+exports.updateHotelPost = async (req, res, next) => {
+    try {
+        const hotelId = req.params.hotelId;
+        const hotel = await Hotel.findByIdAndUpdate(hotelId, req.body, {new:true}); //-check the mongodb methods, this one allows us to find an object, modify it in mongo and then get it back again. The first argument is the record we are searching in the database, the second one is the data we want to use to update to it (in this case the information of the requested object stored inside body). The third argument is an object that with newset to true ensures us that the record has been updated with the new data passed in. If we don't put a res.redirect in the next line of code we will see the page loading undefinitely, even though we have already saved the new updated record in the database (you can check in mongodb)
+        res.redirect(`/all/${hotelId}`)
+    } catch(error) {
+        next(error)
+    }
+}
+
 /* MIDDLEWARE EXAMPLE */
 /* 
 exports.signUp = (req, res, next) => { // next inside of the body indicates when we are ready to move on to the next piece of middleware
