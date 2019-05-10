@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    h2=title
+        .country_wrapper
+            ul
+                each country in allCountries
+                    li
+                        a(href=`/countries/${country}`) #{country}
+                            img(src=`/images/countries/${country}.jpg`)
+                        //- #{country} is to output our dynamic countries
+                else
+                    li There are no countries

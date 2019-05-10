@@ -8,8 +8,8 @@ mixin hotel(hotel)
                 img(src=`/images/hotels/${hotel.image}`)
         .hotel_info
             a(href=`/all/${hotel._id}`)
+                h3=hotel.hotel_name
             //-h3 Hotel 1 this is a static data
-            h3=hotel.hotel_name
             hr
             p= `Star rating: ${hotel.star_rating}`
             p= `Country: ${hotel.country}`

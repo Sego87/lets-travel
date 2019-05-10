@@ -1,8 +1,8 @@
 const Hotel = require('../models/hotel'); // we require to use the 'Hotel' model in the hotel.js model file
 
-exports.homePage = (req, res) => { // exports allows this code to be available in another part of the application. homePage is the name that we decided for the function to be exported
+/* exports.homePage = (req, res) => { // exports allows this code to be available in another part of the application. homePage is the name that we decided for the function to be exported
     res.render('index', { title: 'Lets travel' });
-}
+} */ // we improved this with filtering and aggregate methods with homePageFilters
 
 //remember that req is the data coming in and res is the data coming out from the server
 //we can use middleware in between to change our data or do something with it
@@ -13,8 +13,34 @@ exports.listAllHotels = async (req, res, next) => { // async is necessary in ord
         const allHotels = await Hotel.find({ available: { $eq:true }}); // we use await to be sure that all the documents inside the Hotel collection (Hotel is the name of the model exported from hotel.js) have been found before moving on to the next line of code (we want to render the  next page after finding all the hotels created). With Hotel.find({ available: { $eq:true }}) we are querying (filtering) the hotels with the available attribute set to true, so the unavailable hotels won't appear in the /all section ($eq checks forequality).
         res.render('all_hotels', { title: 'All Hotels', allHotels }); // we render all_hotels.pug, pass in the title of the html and pass in the data of the hotels from the database with allHotels
         /* res.json(allHotels); // this was just to check our data from the database in the json format */
-    } catch(errors) {
-        next(errors);
+    } catch(error) {
+        next(error);
+    }
+}
+
+exports.listAllCountries = async (req, res, next) => {
+    try {
+        const allCountries = await Hotel.distinct('country'); // it will return an array of distinct countries we can pass in in the country field. -IMPORTANT! if you remove await, you are not waiting for the data from the database, so you'll get some weird code asa response. Try to remove it..-. Thanks to distinct, now when we passed in the images of the countries in the all_countries.pug we can see just one image per country even if we have more than one hotel per country, such as Mexico Maldives and Dominican Republic.
+        res.render('all_countries', { title: 'Browse my country', allCountries });
+    } catch(error) {
+        next(error);
+    }
+}
+
+exports.homePageFilters = async (req, res, next) => {
+    try {
+        const hotels = await Hotel.aggregate([ // check the aggregate methods on the mongodb documentation
+            { $match: { available: true } }, // we look for available hotels
+            { $sample: { size: 9 } } // we randomly select 9 of them (so the userand the page won't be overwhelmed)
+        ]);
+        const countries = await Hotel.aggregate([ // it is not a good idea to have 2 different awaits in homePageFilters, we will fix that later
+            { $group: { _id: '$country' } },
+            { $sample: { size: 9 } }
+        ]);
+        res.render('index', { countries, hotels });
+        // res.json(countries) This is just to check that now the id is set to be an individual country
+    } catch(error) {
+        next(error)
     }
 }
 

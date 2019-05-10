@@ -8,9 +8,10 @@ const hotelController = require('../controllers/hotelController'); // we require
 
 /* GET home page. */
 
-router.get('/', hotelController.homePage); // it runs the function homePage in the file hotelController.js
+router.get('/', hotelController.homePageFilters); // it runs the function homePage in the file hotelController.js.-NEW! Updated with the new improved homePageFilters-.
 
 router.get('/all', hotelController.listAllHotels); // same of above but with listAllHotels
+router.get('/countries', hotelController.listAllCountries);
 
 /* 
 router.get('/sign-up', hotelController.signUp, hotelController.logIn); // see middleware example in hotelController. We can pass as many as of these as we want to use, they will be run in sequence (each one of them calling the next one, needs the "next" as a parameter of the function and that parameter will be the next funtion run)
