@@ -64,6 +64,36 @@ exports.createHotelPost = async (req, res, next) => { // with async we mark this
     }
 } // if everything is ok now we should have our hotel saved in the database (it also has his unique id if everything works fine, its id is a proof that we can now use it for the next line of code)
 
+exports.editRemoveGet = (req, res) => {
+    res.render('edit_remove', { title: 'Search for hotel to edit or remove' });
+}
+
+exports.editRemovePost = async (req, res, next) => {
+    try {
+        const hotelId = req.body.hotel_id || null; // we need to handle what will happen if we get a null value
+        const hotelName = req.body.hotel_name || null;
+
+        const hotelData = await Hotel.find({ $or: [ // check the mongodb documentation to check what $or does
+            { _id: hotelId},
+            { hotel_name: hotelName}
+        ]}).collation({ // we are doing something different this time because we don't know if we are searching forthe hotel_id or the hotel_name. collection allows us to do language specific matches.
+            locale: 'en', // english language
+            strength: 2 // optional value, means it is a second level value (not case sensitive)
+        });
+
+        if(hotelData.length > 0) {
+            // res.json(hotelData) this was just to check if we had the data correctly
+            res.render('hotel_detail', { title: 'Add / Remove Hotel', hotelData });
+            return // we don't move on to the else statement if the section is true
+        } else {
+            res.redirect('/admin/edit-remove') // if no data is found in the database we are redirected
+        }
+
+    } catch(errors) {
+        next(errors)
+    }
+}
+
 /* MIDDLEWARE EXAMPLE */
 /* 
 exports.signUp = (req, res, next) => { // next inside of the body indicates when we are ready to move on to the next piece of middleware
