@@ -114,6 +114,26 @@ exports.updateHotelPost = async (req, res, next) => {
     }
 }
 
+exports.deleteHotelGet = async (req, res, next) => {
+    try {
+        const hotelId = req.params.hotelId;
+        const hotel = await Hotel.findOne( { _id: hotelId } ); //  remember that with await we want to be sure that the record by the _id field has been found and matched to hotelId (created just above) before moving on to the next step
+        res.render('add_hotel', { title: 'Delete hotel', hotel });
+    } catch (error) {
+        next(error)
+    }
+}
+
+exports.deleteHotelPost = async (req, res, next) => {
+    try {
+        const hotelId = req.params.hotelId;
+        const hotel = await Hotel.findByIdAndRemove({ _id: hotelId }); // very similar to findByIdAndUpdate, check documentation
+        res.redirect('/') // we want to be redirected to the home page after confirming the deleting of the hotel
+    } catch(error) {
+        next(error)
+    }
+}
+
 /* MIDDLEWARE EXAMPLE */
 /* 
 exports.signUp = (req, res, next) => { // next inside of the body indicates when we are ready to move on to the next piece of middleware
