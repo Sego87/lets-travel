@@ -11,6 +11,7 @@ const hotelController = require('../controllers/hotelController'); // we require
 router.get('/', hotelController.homePageFilters); // it runs the function homePage in the file hotelController.js.-NEW! Updated with the new improved homePageFilters-.
 
 router.get('/all', hotelController.listAllHotels); // same of above but with listAllHotels
+router.get('/all/:hotel', hotelController.hotelDetail);
 router.get('/countries', hotelController.listAllCountries);
 
 /* 

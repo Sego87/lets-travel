@@ -134,6 +134,16 @@ exports.deleteHotelPost = async (req, res, next) => {
     }
 }
 
+exports.hotelDetail = async (req,res, next) => {
+    try {
+        const hotelParam = req.params.hotel; // "hotel" is the name we gave it
+        const hotelData = await Hotel.find( {_id: hotelParam} ); // hotelData stores the unique hotel from the dataBase
+        res.render('hotel_detail', { title: 'Lets Travel', hotelData });
+    } catch(error) {
+        next(error)
+    }
+}
+
 /* MIDDLEWARE EXAMPLE */
 /* 
 exports.signUp = (req, res, next) => { // next inside of the body indicates when we are ready to move on to the next piece of middleware
