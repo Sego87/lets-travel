@@ -70,3 +70,44 @@ button {
 img {
   width: 100%;
 }
+
+/* CONTENT */
+
+/* Hotels and countries view */
+.outer_wrapper {
+  text-align: center;
+  font-size: 1em;
+}
+
+.hotel {
+  background: white;
+  margin: 0 0 1em 0;
+}
+
+.hotel_info {
+  padding: 1em;
+}
+
+.form_input {
+  margin: 1em 0;
+}
+
+.form_input input, textarea {
+  width: 70%;
+  text-align: left;
+}
+
+.form_input label {
+  display: inline-block;
+  width: 20%;
+}
+
+textarea {
+  border: none;
+  border-radius: 5px;
+}
+
+.button_small {
+  width: 100px;
+  margin: 0.5em;
+}
