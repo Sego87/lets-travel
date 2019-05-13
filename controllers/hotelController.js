@@ -138,7 +138,7 @@ exports.hotelDetail = async (req,res, next) => {
     try {
         const hotelParam = req.params.hotel; // "hotel" is the name we gave it
         const hotelData = await Hotel.find( {_id: hotelParam} ); // hotelData stores the unique hotel from the dataBase
-        res.render('hotel_detail', { title: 'Lets Travel', hotelData });
+        res.render('hotel_detail', { title: 'Lets Travel', hotelData }); // remember that we are passing in to our hotel_detail template an object with the value paired title and the hotelData created above
     } catch(error) {
         next(error)
     }

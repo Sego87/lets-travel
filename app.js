@@ -13,6 +13,13 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+app.use( (req, res, next) => { // app.use middleware doesn't  have a route as a first parameter, indeed is an action which is used for every request to our application (not like the local variables that we createdin our functions so far). It basically adds a layer which we pass through of each request. We can use app.use to create some middleware for all requests
+  // console.log('hello'); // for each action we perform we will get a "hello" string in the console,  even though we will always see a spinning icon at the title of the page if we don't define the next call. This is because a middleware is supposed to be something which we pass through, so it needs a well defined next piece of the middleware in the chain.
+  // console.log('current path is ' + req.path); // path is a property of the request that gives us the url
+  res.locals.url = req.path // this will assign the req.path to the locals objects which is on the response (.url is the name we assigned it by our choice). So basically now we can acces this url local in any of our templates of our projects. We can use it for conditional rendering
+  next();
+});
+
 // Set up mongoose connection
 mongoose.connect('mongodb+srv://travel:travel1@lets-travel-jton2.mongodb.net/test?retryWrites=true', {useNewUrlParser: true}); // We copied this from the mongoDB website of our cluster in the connection section (this is not the best way to write passwords - it is unsure - and it is not recommended to wirte the URL here, but it was in order to understand) -the second argument was right to avoid the error message in the console I was getting all the time on 15/4/2019 (DeprecationWarning: current URL string parser is deprecated, and will be removed in a future version. To use the new parser, pass option { useNewUrlParser: true } to MongoClient.connect.)-
 mongoose.Promise = global.Promise; // Once we start a query our database we need to deal with the information which is returned back to us, in earlier versions of mongoose we used a callback setup, but now we can use promises, a lot simpler and easier to mantain (we could set up mongo to use a promise library such as bluebird - npm module -, but with global.Promise we can use native promises in ES6 rather than installing another node module).
