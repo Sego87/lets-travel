@@ -29,15 +29,23 @@ exports.listAllCountries = async (req, res, next) => {
 
 exports.homePageFilters = async (req, res, next) => {
     try {
-        const hotels = await Hotel.aggregate([ // check the aggregate methods on the mongodb documentation
+        const hotels = /* await */ Hotel.aggregate([ // check the aggregate methods on the mongodb documentation
             { $match: { available: true } }, // we look for available hotels
-            { $sample: { size: 9 } } // we randomly select 9 of them (so the userand the page won't be overwhelmed)
+            { $sample: { size: 9 } } // we randomly select 9 of them (so the user and the page won't be overwhelmed)
         ]);
-        const countries = await Hotel.aggregate([ // it is not a good idea to have 2 different awaits in homePageFilters, we will fix that later
+        const countries = /* await */ Hotel.aggregate([ // it is not a good idea to have 2 different awaits in homePageFilters, we will fix that later
             { $group: { _id: '$country' } },
             { $sample: { size: 9 } }
         ]);
-        res.render('index', { countries, hotels });
+
+        const [filteredCountries, filteredHotels] = await Promise.all([countries,hotels]); //- Promise.all() takes in multiple promises (it didn't make any sense to have 2 different awaits when in the reality they are part of the same filtering and it is not necessary to  wait for one filter in order to start the second one). In this case now we want to resolve the promises for countries and hotels at the same time, so everything has now a faster performance. countries will be unpacked and stored in a constant called filteredCountries, hotels in filteredHotels
+
+        //-This example is pretty much the same of what we have done above
+        /* const food = ['cheese', 'fish', 'rice'];
+        const [a,b,c] = [food];
+        res.send(a); */
+
+        res.render('index', { /* countries */filteredCountries, filteredHotels/* hotels */ });
         // res.json(countries) This is just to check that now the id is set to be an individual country
     } catch(error) {
         next(error)
