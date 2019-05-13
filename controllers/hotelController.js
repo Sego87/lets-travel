@@ -1,4 +1,18 @@
 const Hotel = require('../models/hotel'); // we require to use the 'Hotel' model in the hotel.js model file
+const cloudinary = require('cloudinary');
+const multer = require('multer');
+
+cloudinary.config({ // cloudinary.config stores all the config details which have been saved in the .env file
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+})
+
+const storage = multer.discStorage({}); // the default saving directory is the temporary folder if the object is empty, indeed we don't need to set a folder since we are going to store our images into cloudinary.
+
+const upload = multer({ storage }); //multer({storage}) is telling multer where our files will be stored.We could also for instance add some filters for the accepted file types
+
+exports.upload = upload.single('image'); //we are telling multer that we want to upload one file at a time, we decided to call it image
 
 /* exports.homePage = (req, res) => { // exports allows this code to be available in another part of the application. homePage is the name that we decided for the function to be exported
     res.render('index', { title: 'Lets travel' });
