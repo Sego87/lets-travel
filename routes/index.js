@@ -13,6 +13,7 @@ router.get('/', hotelController.homePageFilters); // it runs the function homePa
 router.get('/all', hotelController.listAllHotels); // same of above but with listAllHotels
 router.get('/all/:hotel', hotelController.hotelDetail);
 router.get('/countries', hotelController.listAllCountries);
+router.get('/countries/:country', hotelController.hotelsByCountry);
 
 /* 
 router.get('/sign-up', hotelController.signUp, hotelController.logIn); // see middleware example in hotelController. We can pass as many as of these as we want to use, they will be run in sequence (each one of them calling the next one, needs the "next" as a parameter of the function and that parameter will be the next funtion run)

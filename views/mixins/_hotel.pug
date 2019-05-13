@@ -11,7 +11,7 @@ mixin hotel(hotel)
                 h3=hotel.hotel_name
             //-h3 Hotel 1 this is a static data
             hr
-            if url.startWith('/all/')
+            if url.startsWith('/all/')
                 p=hotel.hotel_description
                 hr
                 //- the description and the horizontal line will be rendered just if we are in the '/all/' url. Note that they will be rendered just in the hotel detail page and not when all hotels are shown.In index.js we have '/all' and '/all/:hotel', which are not the same thing indeed.

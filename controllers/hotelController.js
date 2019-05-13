@@ -144,6 +144,17 @@ exports.hotelDetail = async (req,res, next) => {
     }
 }
 
+exports.hotelsByCountry = async (req, res, next) => {
+    try {
+        const countryParam = req.params.country // "country" is the name we gave it
+        const countryList = await Hotel.find({ country: countryParam }); // "country" is the name of that field in the database, is a coincidence  that we named it again country for the routing
+        // res.json(countryList);
+        res.render('hotels_by_country', { title: `Browse by country: ${countryParam}`, countryList});
+    } catch(error) {
+        next(error)
+    }
+}
+
 /* MIDDLEWARE EXAMPLE */
 /* 
 exports.signUp = (req, res, next) => { // next inside of the body indicates when we are ready to move on to the next piece of middleware
