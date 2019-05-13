@@ -29,6 +29,7 @@ exports.listAllCountries = async (req, res, next) => {
 
 exports.homePageFilters = async (req, res, next) => {
     try {
+        /* console.log(process.env.DB) */ // check what env does (it exists to store the variables mainly) and its documentation (DB is the variable we created in the .env file).
         const hotels = /* await */ Hotel.aggregate([ // check the aggregate methods on the mongodb documentation
             { $match: { available: true } }, // we look for available hotels
             { $sample: { size: 9 } } // we randomly select 9 of them (so the user and the page won't be overwhelmed)
