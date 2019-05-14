@@ -8,11 +8,26 @@ cloudinary.config({ // cloudinary.config stores all the config details which hav
     api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
-const storage = multer.discStorage({}); // the default saving directory is the temporary folder if the object is empty, indeed we don't need to set a folder since we are going to store our images into cloudinary.
+const storage = multer.diskStorage({}); // the default saving directory is the temporary folder if the object is empty, indeed we don't need to set a folder since we are going to store our images into cloudinary.
 
 const upload = multer({ storage }); //multer({storage}) is telling multer where our files will be stored.We could also for instance add some filters for the accepted file types
 
 exports.upload = upload.single('image'); //we are telling multer that we want to upload one file at a time, we decided to call it image
+
+exports.pushToCloudinary = (req, res, next) => {
+    if(req.file) { // we are checking if there is an image, multer places this file on the request object under the name of file. We check that it exists because then we want to push it to cloudinary
+        cloudinary.uploader.upload(req.file.path) // the .upload method will upload an image which we pass in, we can access it using the req.file.path
+        .then((result) => { // we use now a promise (with .then) to handle what happens when the upload is succesful. The function created in the promise takes in the result. It stores the image we get back from cloudinary, which also includes a public_id which cloudinary adds to the image. We will use the public_id to reference the image in our project by set its value to req.body.image. This req.body.image is then passed to createHotelPost which is the next stage in the middleware. This image id is then saved when  we save the hotel to our mongo database
+            req.body.image = result.public_id;  // after the redirection we now will see in the inspection tools that the image is the id of the image uploaded to cloudinary, we still have to pull it from cloudinary to actually see the image and not just its id
+            next(); // we move to the last stage of the middleware
+        })
+        .catch(() => { // as we always do we need to finish off a promise by adding catch statement to handle any errors and redirect to the same page we are on
+            res.redirect('/admin/add');
+        })
+    } else { // we want to move to the next piece of middleware if no file exists (the next middleware is the createHotelPost)
+        next();
+    }
+}
 
 /* exports.homePage = (req, res) => { // exports allows this code to be available in another part of the application. homePage is the name that we decided for the function to be exported
     res.render('index', { title: 'Lets travel' });
