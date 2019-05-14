@@ -34,6 +34,11 @@ const hotelSchema = new mongoose.Schema({
     }
 }); // This schema will map or match to the data inside of our database. Now we shaped how our database data will be constructed.
 
+hotelSchema.index({  // .index will allow us to index the fields we want to search from our model -we need it to use searchResult-. In this case we want to index andsearch for the name of the hotel and the country. We set them to be text strings
+    hotel_name: 'text',
+    country: 'text'
+}) // now we have also in mongodb a new system collection (system.indexes) with our indexed fields
+
 // Export model
 module.exports = mongoose.model('Hotel', hotelSchema); // We want to export this model to the database. We decided now to call it 'Hotel' and we also decided to pass the hotelSchema
 

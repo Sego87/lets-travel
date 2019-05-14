@@ -193,6 +193,19 @@ exports.hotelsByCountry = async (req, res, next) => {
     }
 }
 
+exports.searchResults = async (req, res, next) => {
+    try {
+        const searchQuery = req.body; // the req.body stores the information passed from our post request, IE all the information which is inside of our form
+        const searchData = await Hotel.aggregate([ // we use the aggregation pipeline like before
+            { $match: { $text: {$search: `\"${searchQuery.destination}\"` } } }, // we want to match any of our records to the text entered by the user, this can be achieved using this dollar symbol text -$- which performs a text search. Here we are passing in the search, which is going to be a string, which mongo uses to query our database. \"anyField\" means that mongodb knows we are looking for the full phrase, not just for separate words, so inthis case if we write "hotel 1" we will get back just the hotel 1, not all of the hotels because it searched for the words "hotel" and "1" separately
+            { $match: { available: true }} // the user will get just the available hotels
+        ])
+        res.json(searchData)
+    } catch(error) {
+        next(error)
+    }
+}
+
 /* MIDDLEWARE EXAMPLE */
 /* 
 exports.signUp = (req, res, next) => { // next inside of the body indicates when we are ready to move on to the next piece of middleware

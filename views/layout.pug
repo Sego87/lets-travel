@@ -16,7 +16,8 @@ html
             a(href="/login") login
 
       .search_nav
-        form
+        form(action="/results" method="POST")
+          //- when we submit this form we submit it to the /results route, it is a POST method
           .input_wrapper
             label(for="destination") Destination
             input(type="text", id="destination", name="destination" required)
