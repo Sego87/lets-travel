@@ -196,11 +196,15 @@ exports.hotelsByCountry = async (req, res, next) => {
 exports.searchResults = async (req, res, next) => {
     try {
         const searchQuery = req.body; // the req.body stores the information passed from our post request, IE all the information which is inside of our form
+        const parsedStars = parseInt(searchQuery.stars);
+        const parsedSort = parseInt(searchQuery.sort);
         const searchData = await Hotel.aggregate([ // we use the aggregation pipeline like before
             { $match: { $text: {$search: `\"${searchQuery.destination}\"` } } }, // we want to match any of our records to the text entered by the user, this can be achieved using this dollar symbol text -$- which performs a text search. Here we are passing in the search, which is going to be a string, which mongo uses to query our database. \"anyField\" means that mongodb knows we are looking for the full phrase, not just for separate words, so inthis case if we write "hotel 1" we will get back just the hotel 1, not all of the hotels because it searched for the words "hotel" and "1" separately
-            { $match: { available: true }} // the user will get just the available hotels
-        ])
-        res.json(searchData)
+            { $match: { available: true, star_rating: { $gte: parsedStars} }}, // the user will get just the available hotels, the preferred number of stars ($gte=greater than)( .stars is because in the layout we set name=stars)(without parsedStars we will get an error because we would try to match a string to a number -before it was directly searchQuery.stars-. the parsInt method converts our string to a number)
+            { $sort: { cost_per_night: parsedSort } } // same concept of above
+        ]);
+        // res.json(searchData)
+        // res.send(typeof searchQuery.stars); //we want to check if the data we get from the body is a string or a number (in mongo is a number)
     } catch(error) {
         next(error)
     }
