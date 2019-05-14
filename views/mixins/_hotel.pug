@@ -5,7 +5,8 @@ mixin hotel(hotel)
         .hotel_img
             a(href=`/all/${hotel._id}`)
                 //- `/all/${hereGoesTheDynamicSection}`
-                img(src=`/images/hotels/${hotel.image}`)
+                //- img(src=`/images/hotels/${hotel.image}`) this was before uploading the images to the cloud
+                img(src=`http://res.cloudinary.com/magicmike87/image/upload/${hotel.image}.jpg`)
         .hotel_info
             a(href=`/all/${hotel._id}`)
                 h3=hotel.hotel_name
