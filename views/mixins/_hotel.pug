@@ -1,4 +1,4 @@
-mixin hotel(hotel)
+mixin hotel(hotel, searchQuery)
     //-with hotel(hotel) we named the mixin hotel and passed in the hotel data for each hotel from the database
 
     .hotel
@@ -19,3 +19,14 @@ mixin hotel(hotel)
             p= `Star rating: ${hotel.star_rating}`
             p= `Country: ${hotel.country}`
             p= `Cost per night: $ ${hotel.cost_per_night}`
+        
+        if url === '/results'
+            .hotel_order_details
+                p= `Number of nights: ${searchQuery.duration}`
+                p= `Departure date: ${searchQuery.dateOfDeparture}`
+                - const costEach = searchQuery.duration * hotel.cost_per_night
+                //-the duration is stored in searchQuery while the cost_per_night is stored in the hotel object in the database (cost_per_night is not an input from the user indeed)
+                - const totalCost = costEach * searchQuery.numberOfGuests
+                p= `Total per person: $ ${costEach}`
+                hr
+                p= `Total cost: $ ${totalCost}`

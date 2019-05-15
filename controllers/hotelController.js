@@ -205,6 +205,7 @@ exports.searchResults = async (req, res, next) => {
         ]);
         // res.json(searchData)
         // res.send(typeof searchQuery.stars); //we want to check if the data we get from the body is a string or a number (in mongo is a number)
+        res.render('search_results', { title: 'Search results', searchQuery, searchData }); // we want to pass the departure date and the number of nights (stored in the req.body -what the user wrote- sent from the form -req.body stores everything the user puts in the form-) and we want to pass the data from the database after the aggregation filters (stored in searchData) 
     } catch(error) {
         next(error)
     }

@@ -86,6 +86,7 @@ img {
 
 .hotel_info {
   padding: 1em;
+  text-align: center;
 }
 
 .form_input {
@@ -110,6 +111,12 @@ textarea {
 .button_small {
   width: 100px;
   margin: 0.5em;
+}
+
+.hotel_order_details {
+  background: #eed;
+  text-align: center;
+  padding: 1em;
 }
 
 @media (min-width: 1000px) {
@@ -157,6 +164,11 @@ textarea {
   .hotel_info {
     flex: 1;
     padding: 0 1em;
+    text-align: left;
+  }
+
+  .hotel_order_details {
+    text-align: left;
   }
 
   .country_wrapper ul {
