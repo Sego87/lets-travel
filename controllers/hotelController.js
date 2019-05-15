@@ -196,8 +196,9 @@ exports.hotelsByCountry = async (req, res, next) => {
 exports.searchResults = async (req, res, next) => {
     try {
         const searchQuery = req.body; // the req.body stores the information passed from our post request, IE all the information which is inside of our form
-        const parsedStars = parseInt(searchQuery.stars);
-        const parsedSort = parseInt(searchQuery.sort);
+        const parsedStars = parseInt(searchQuery.stars) || 1; // || 1 is because we call searchResults when redirected to the /results route. In the _hotel.pug we send the post request from the form to the /results route. So when we are already in the detail view and want to book the same hotel of the detail view we don't need to put any star rating at the bottom.That's why we have the || 1, because if we used the top search bar we put a real minimum number of stars to search for hotels displayed then in the /results route, but if we were already in the hotel detail page we don't put a minimum number of stars for the match in the database, we set it equal to 1 automatically.
+        const parsedSort = parseInt(searchQuery.sort) || 1;
+
         const searchData = await Hotel.aggregate([ // we use the aggregation pipeline like before
             { $match: { $text: {$search: `\"${searchQuery.destination}\"` } } }, // we want to match any of our records to the text entered by the user, this can be achieved using this dollar symbol text -$- which performs a text search. Here we are passing in the search, which is going to be a string, which mongo uses to query our database. \"anyField\" means that mongodb knows we are looking for the full phrase, not just for separate words, so inthis case if we write "hotel 1" we will get back just the hotel 1, not all of the hotels because it searched for the words "hotel" and "1" separately
             { $match: { available: true, star_rating: { $gte: parsedStars} }}, // the user will get just the available hotels, the preferred number of stars ($gte=greater than)( .stars is because in the layout we set name=stars)(without parsedStars we will get an error because we would try to match a string to a number -before it was directly searchQuery.stars-. the parsInt method converts our string to a number)
