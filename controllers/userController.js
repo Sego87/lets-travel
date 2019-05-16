@@ -9,7 +9,7 @@ exports.signUpGet = (req, res) => {
     res.render('sign_up', { title: 'User sign up' });
 }
 
-exports.signUpPost = [ // We need validation and sanitazation. Validation makes us sure that the user entered values in the correct format (similar to the models we createdfor the hotels and the users, such as respecting minimum number of characters, hyphenom data, if the passwordmatches and so on..). Sanitazation is the process that removes and replaces characters entered into the input fields which maybe used to send malicious data to the server. Express-validator contains modules to accomplish both of these tasks    // Validate user data
+exports.signUpPost = [ // We need validation and sanitization. Validation makes us sure that the user entered values in the correct format (similar to the models we createdfor the hotels and the users, such as respecting minimum number of characters, hyphenom data, if the passwordmatches and so on..). Sanitization is the process that removes and replaces characters entered into the input fields which maybe used to send malicious data to the server. Express-validator contains modules to accomplish both of these tasks    // Validate user data
     check('first_name').isLength({ min: 1 }).withMessage('First name must be specified') // with the isLength validator method we want to check if we have at least 1 character in our first_name. Then we passed in an error message string in case no characters have been entered
     .isAlphanumeric().withMessage('First name must be alphanumeric'), // this line is chained with the above one, placedhere just for readability
 
@@ -29,15 +29,17 @@ exports.signUpPost = [ // We need validation and sanitazation. Validation makes 
     .custom(( value, { req } ) => value === req.body.password)
     .withMessage('Passwords do not match'),
 
+    sanitize('*').trim().escape(), // the * means all of the fields. The trim method removes all the white spaces before and after each field (so no hacker can put maliciously and intentionally html code inside of the fields - such as first name <p> Michele </p> for instance-). The escape method removes any html characters potentially used for a hacker attack (indeed with this method in the json file we can not see the html code entered in the field if entered)
+
     (req, res, next) => { // now we can define our function as always
         const errors = validationResult(req);
 
         if(!errors.isEmpty()) { // we check if the errors array contains any errors (that's why we put the ! because !=not , this means that we activate the "if" if the errors array is not empty)
-            // There are erros
-            res.render('sign_up', { title: 'Please fix the following errors:' });
+            // There are errors
+            res.json(req.body)
+            // res.render('sign_up', { title: 'Please fix the following errors:', errors: errors.array() }); // We pass the errors to the tamplate as an array containing all the detected errors
         } else {
             // No errors
         }
     }
-
 ]
