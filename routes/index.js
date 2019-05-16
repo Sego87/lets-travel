@@ -5,6 +5,7 @@ var router = express.Router();
 
 // require controllers:
 const hotelController = require('../controllers/hotelController'); // we required the usage of the hotelController.js (the name of the const hotelController has to be exactly the name of our file in which we stored the route)
+const userController = require('../controllers/userController');
 
 /* GET home page. */
 
@@ -58,6 +59,12 @@ router.get('/admin/:hotelId/delete', hotelController.deleteHotelGet);
 router.post('/admin/:hotelId/delete', hotelController.deleteHotelPost);
 
 module.exports = router;
+
+// USER ROUTES
+
+// ===========
+
+router.get('/sign-up', userController.signUpGet);
 
 // after installing nodemon it will appear as a new devDependency in the package.json
 // in order to make nodemon work I create a new script in package.json right below "start" and I call it "devstart", then the related command is "nodemon ./bin/www"
