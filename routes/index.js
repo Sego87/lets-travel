@@ -65,6 +65,7 @@ module.exports = router;
 // ===========
 
 router.get('/sign-up', userController.signUpGet);
+router.post('/sign-up', userController.signUpPost);
 
 // after installing nodemon it will appear as a new devDependency in the package.json
 // in order to make nodemon work I create a new script in package.json right below "start" and I call it "devstart", then the related command is "nodemon ./bin/www"
