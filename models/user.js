@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
+const passportLocalMongoose = require('passport-local-mongoose');
 
 const userSchema = new mongoose.Schema({
-    fisrt_name: {
+    first_name: {
         type: String,
         required: 'First name is required',
         trim: true,
@@ -29,5 +30,7 @@ const userSchema = new mongoose.Schema({
         default: false
     }
 });
+
+userSchema.plugin(passportLocalMongoose, { usernameField: 'email' }); // we need to add our userSchema to the plugin in order to use it. The second parameter is an option object, check the documentation on the internet (using 'email' we are saying that we want to use the entered email as username of the user-by default it would look for the field called username, which we don't have-)
 
 module.exports = mongoose.model('User',  userSchema);

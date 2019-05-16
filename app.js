@@ -8,11 +8,24 @@ const mongoose = require('mongoose'); // we are requiring our mongoose package f
 
 var indexRouter = require('./routes/index');
 
+// For passport.js:
+const User = require('./models/user'); // we require the User schema
+const passport = require('passport');// we require the passport module
+
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+// Configure passport middleware
+app.use(passport.initialize()); // in our express app we need to initialize the passport module in order to use it
+app.use(passport.session()); // this will allow us to use sessions, to keep the user logged int
+
+passport.use(User.createStrategy()); // this is a helper method provided by the passport-local-mongoose module, it is responsable for creating the passport local strategy for us (check documentation), to allow us to take advantage of the user and password login which we want to use from passport
+
+passport.serializeUser(User.serializeUser()); // It gets the information from the user object and handles which information has to be store into our session
+passport.deserializeUser(User.deserializeUser()); // It is responsable of getting the correct user information back from our session and then back into the user object. Therefore staying logged in between pages
 
 app.use( (req, res, next) => { // app.use middleware doesn't  have a route as a first parameter, indeed is an action which is used for every request to our application (not like the local variables that we createdin our functions so far). It basically adds a layer which we pass through of each request. We can use app.use to create some middleware for all requests
   // console.log('hello'); // for each action we perform we will get a "hello" string in the console,  even though we will always see a spinning icon at the title of the page if we don't define the next call. This is because a middleware is supposed to be something which we pass through, so it needs a well defined next piece of the middleware in the chain.

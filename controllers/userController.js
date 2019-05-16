@@ -38,8 +38,16 @@ exports.signUpPost = [ // We need validation and sanitization. Validation makes 
             // There are errors
             // res.json(req.body)
             res.render('sign_up', { title: 'Please fix the following errors:', errors: errors.array() }); // We pass the errors to the tamplate as an array containing all the detected errors
+            return; // it will brake at this statement if there  are any errors at this stage
         } else {
             // No errors
+            const newUser = new User(req.body);
+            User.register(newUser, req.body.password, function(err) { // method provided by passport-local-mongoose which registers the new user. First argument is the new user that we want to register, the second one is the password, the third one is a callback function that runs one the validation method has completed
+                if(err) { // if an error is present
+                    console.log('error while registering!', err);
+                    return next(err);
+                }
+            });
         }
     }
 ]
