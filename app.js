@@ -8,6 +8,10 @@ const mongoose = require('mongoose'); // we are requiring our mongoose package f
 
 var indexRouter = require('./routes/index');
 
+// For sessions
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session); // connect-mongo returns a function, but a normal require call will not immediately execute the function: instead it would just store it inside of this constant created MongoStore. That's why at the end we need to add (session), to go ahead and execute this function along with passing in this session variable to this function. Then below we can set up our session as a middleware to run for each request with app.use and passing in again our session variable
+
 // For passport.js:
 const User = require('./models/user'); // we require the User schema
 const passport = require('passport');// we require the passport module
@@ -17,6 +21,13 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+app.use(session({ // This is a session middleware with options in the object
+  secret: process.env.SECRET, // The SECRET is a text string of our choice which is used to sign the session id coockie
+  saveUninitialized: false, // This means that a new session is not saved to the database unless the session is actually modified (useful for a visitor browsing the platform, it doesn't need to have the details saved during the session.This will save a lot of unnecessary saves to our database)
+  resave: false, // The session is not saved unless it is actually modified
+  store: new MongoStore({ mongooseConnection: mongoose.connection }) // This new store takes in the mongoose connection as an option. mongoose.connection is the same that we used when we set the connection to the mongodb, check the code below
+}));
 
 // Configure passport middleware
 app.use(passport.initialize()); // in our express app we need to initialize the passport module in order to use it

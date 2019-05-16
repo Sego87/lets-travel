@@ -8,8 +8,17 @@ const hotelController = require('../controllers/hotelController'); // we require
 const userController = require('../controllers/userController');
 
 /* GET home page. */
-
 router.get('/', hotelController.homePageFilters); // it runs the function homePage in the file hotelController.js.-NEW! Updated with the new improved homePageFilters-.
+
+/* router.get('/', function(req,res){
+  if(req.session.page_views) { // this express session module makes our session data available in the request.session object and we can also make use of the page_views to see how many times the page has been visited. So we can now increment the page views total on each request. This if statement will handle if the user has already visited the page 
+    req.session.page_views++; // this will increment the number of page views each time thereis a request to our homepage. For each page refresh basically we increment the number of views
+    res.send(`Number of page visits: ${req.session.page_views}`); // this will show the page views
+  } else { // the else statement will handle if the user is visiting for the first time
+    req.session.page_views = 1;
+    res.send('First visit');
+  }
+}); // in mongodb we will see now also a new collection called sessions with the details of each session,with a unique id at the top and some information about the coockie itself (if we want we can set the coockie options) */
 
 router.get('/all', hotelController.listAllHotels); // same of above but with listAllHotels
 router.get('/all/:hotel', hotelController.hotelDetail);
