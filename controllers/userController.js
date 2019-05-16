@@ -36,8 +36,8 @@ exports.signUpPost = [ // We need validation and sanitization. Validation makes 
 
         if(!errors.isEmpty()) { // we check if the errors array contains any errors (that's why we put the ! because !=not , this means that we activate the "if" if the errors array is not empty)
             // There are errors
-            res.json(req.body)
-            // res.render('sign_up', { title: 'Please fix the following errors:', errors: errors.array() }); // We pass the errors to the tamplate as an array containing all the detected errors
+            // res.json(req.body)
+            res.render('sign_up', { title: 'Please fix the following errors:', errors: errors.array() }); // We pass the errors to the tamplate as an array containing all the detected errors
         } else {
             // No errors
         }
