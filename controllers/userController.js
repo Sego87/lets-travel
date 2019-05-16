@@ -62,3 +62,8 @@ exports.loginPost = Passport.authenticate('local', { // authenticate is a method
     successRedirect: '/',
     failureRedirect: '/login'
 });
+
+exports.logout = (req, res) => {
+    req.logout(); // we can access the logout method on the request object, which is provided by passport
+    res.redirect('/');
+}
