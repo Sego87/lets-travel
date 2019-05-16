@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Passport = require('passport');
 
 // Express validator
 const { check, validationResult } = require('express-validator/check'); // the {} are used to import just a single module of the whole package (in this case we want to use just the check and validationResult modules of the validator package). validationResults runs the validation and stores the validation errors into a result object
@@ -47,7 +48,17 @@ exports.signUpPost = [ // We need validation and sanitization. Validation makes 
                     console.log('error while registering!', err);
                     return next(err);
                 }
+                next(); //we want to activate the next middleware (the loginPost) to let the new user be already logged in after registering. It moves to loginPost (check the routing in index.js)
             });
         }
     }
 ]
+
+exports.loginGet = (req,res) => {
+    res.render('login', { title: 'Login to continue' });
+}
+
+exports.loginPost = Passport.authenticate('local', { // authenticate is a method from the passport module. The first argument is the local strategy to handle the login request. The second argument is an option object. The first option redirects the user when the login has been succesful, the second one if unseccesful unseccesful.
+    successRedirect: '/',
+    failureRedirect: '/login'
+});

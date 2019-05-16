@@ -61,11 +61,12 @@ router.post('/admin/:hotelId/delete', hotelController.deleteHotelPost);
 module.exports = router;
 
 // USER ROUTES
-
 // ===========
 
 router.get('/sign-up', userController.signUpGet);
-router.post('/sign-up', userController.signUpPost);
+router.post('/sign-up', userController.signUpPost, userController.loginPost); // after signing up we activate the next middleware to let the user be already logged in
+router.get('/login', userController.loginGet);
+router.post('/login', userController.loginPost);
 
 // after installing nodemon it will appear as a new devDependency in the package.json
 // in order to make nodemon work I create a new script in package.json right below "start" and I call it "devstart", then the related command is "nodemon ./bin/www"
