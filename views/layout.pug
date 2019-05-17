@@ -49,6 +49,17 @@ html
           .input_wrapper
             button(type="submit") SEARCH!
 
+      - const values = Object.values(flash)
+      //- this will pass in flash messages which is an object, and use the .values method which returns an array of the object's property values. The values basically are the text strings that we show in the flash messages
+      - const keys = Object.keys(flash)
+      //- the keys are the message types that we want, we are going to create 3 (success, info, error)
+      if keys.length > 0
+        div(class=`message message_${keys}`)
+          span= values
+          span.close_btn(onclick="this.parentNode.remove()") &times;
+          //- this provides a x which the user can click on to then remove the flash message (instead of &times; we could have used a normal x)
+          //- onclick="this.parentNode.remove()" creates an event that when the user clicks on the x it will remove the parent node,IE the div parent, the flash message
+
       img(src="/images/beach.jpg")
 
       //- h1 Let's Travel

@@ -22,6 +22,7 @@ exports.pushToCloudinary = (req, res, next) => {
             next(); // we move to the last stage of the middleware
         })
         .catch(() => { // as we always do we need to finish off a promise by adding catch statement to handle any errors and redirect to the same page we are on
+            req.flash('error', 'Sorry, there was a problem uploading your image, please try again'); // another flash message with key:value error:'Sorry,...'
             res.redirect('/admin/add');
         })
     } else { // we want to move to the next piece of middleware if no file exists (the next middleware is the createHotelPost)
@@ -96,6 +97,7 @@ exports.createHotelPost = async (req, res, next) => { // with async we mark this
     try{ // we put the code inside try because this way we can try to run the code and test for any error
         const hotel = new Hotel(req.body); // We created a new 'Hotel' passing in the data from the req.body (where we have the data stored)
         await hotel.save(); // with hotel.save() we want to make sure that the Hotel has finished saving, if worked we can start doing things with it. Adding await before this line we make sure this code parses and then wait this to finish before moving on to the next line. We want to make sure we await the hotel saving before moving on because we will soon use this data immediately after the save. Basically we want to make sure that the save has been completed and it is available before calling anymore lines of code which need this hotel data    
+        req.flash('success',  `${hotel.hotel_name} created successfully`); // a flash message displaying the correct creation of the new hotel (key success value 'hotelpippo created...')
         res.redirect(`/all/${hotel._id}`) // now that the hotel has been saved for sure, we want to redirect it to our path /all/ (we used the sintax with `wantedPath${variable._id}` because we add a dynamic data with its unique id provided by the server). Indeed in the browser we should see the url /all/idOfTheHotelCreated, because we waited for the hotel to be created first before moving on to redirect (below we should see a not found error because we haven't created that route yet - we will fix this later when we create a template with the full hotel details -)
     } catch(error) { // if there are any errors we can handle them with a catch statement
         next(error); // calling next and passing in the error,we will pass the error along a middleware chain until it reaches an error handler which can deal with it correctly. (we alredy have an error handler within the express framework insideofour app.js - see error handler in app.js -)
@@ -114,7 +116,7 @@ exports.editRemovePost = async (req, res, next) => {
         const hotelData = await Hotel.find({ $or: [ // check the mongodb documentation to check what $or does
             { _id: hotelId},
             { hotel_name: hotelName}
-        ]}).collation({ // we are doing something different this time because we don't know if we are searching forthe hotel_id or the hotel_name. collection allows us to do language specific matches.
+        ]}).collation({ // we are doing something different this time because we don't know if we are searching for the hotel_id or the hotel_name. collection allows us to do language specific matches.
             locale: 'en', // english language
             strength: 2 // optional value, means it is a second level value (not case sensitive)
         });
@@ -124,6 +126,7 @@ exports.editRemovePost = async (req, res, next) => {
             res.render('hotel_detail', { title: 'Add / Remove Hotel', hotelData });
             return // we don't move on to the else statement if the section is true
         } else {
+            req.flash('info', 'No matches were  found'); // flash message of type (key) info, and the string as its value
             res.redirect('/admin/edit-remove') // if no data is found in the database we are redirected
         }
 
@@ -146,6 +149,7 @@ exports.updateHotelPost = async (req, res, next) => {
     try {
         const hotelId = req.params.hotelId;
         const hotel = await Hotel.findByIdAndUpdate(hotelId, req.body, {new:true}); //-check the mongodb methods, this one allows us to find an object, modify it in mongo and then get it back again. The first argument is the record we are searching in the database, the second one is the data we want to use to update to it (in this case the information of the requested object stored inside body). The third argument is an object that with newset to true ensures us that the record has been updated with the new data passed in. If we don't put a res.redirect in the next line of code we will see the page loading undefinitely, even though we have already saved the new updated record in the database (you can check in mongodb)
+        req.flash('success', `${hotel.hotel_name} updated successfully`);
         res.redirect(`/all/${hotelId}`)
     } catch(error) {
         next(error)
@@ -166,6 +170,7 @@ exports.deleteHotelPost = async (req, res, next) => {
     try {
         const hotelId = req.params.hotelId;
         const hotel = await Hotel.findByIdAndRemove({ _id: hotelId }); // very similar to findByIdAndUpdate, check documentation
+        req.flash('info', `Hotel ID: ${hotelId} has been deleted`);
         res.redirect('/') // we want to be redirected to the home page after confirming the deleting of the hotel
     } catch(error) {
         next(error)

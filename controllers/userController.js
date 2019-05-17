@@ -60,10 +60,13 @@ exports.loginGet = (req,res) => {
 
 exports.loginPost = Passport.authenticate('local', { // authenticate is a method from the passport module. The first argument is the local strategy to handle the login request. The second argument is an option object. The first option redirects the user when the login has been succesful, the second one if unseccesful unseccesful.
     successRedirect: '/',
-    failureRedirect: '/login'
+    successFlash: 'You are now logged in', //We show a flash message if the login  has been successful
+    failureRedirect: '/login',
+    failureFlash: 'Login failed, please try again'
 });
 
 exports.logout = (req, res) => {
     req.logout(); // we can access the logout method on the request object, which is provided by passport
+    req.flash('info', 'You are now logged out'); // this provides a flash message with the key: 'info' and the value: 'You are now logged out' 
     res.redirect('/');
 }

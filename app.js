@@ -12,6 +12,9 @@ var indexRouter = require('./routes/index');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session); // connect-mongo returns a function, but a normal require call will not immediately execute the function: instead it would just store it inside of this constant created MongoStore. That's why at the end we need to add (session), to go ahead and execute this function along with passing in this session variable to this function. Then below we can set up our session as a middleware to run for each request with app.use and passing in again our session variable
 
+// For flash messages
+const flash = require('connect-flash');
+
 // For passport.js:
 const User = require('./models/user'); // we require the User schema
 const passport = require('passport');// we require the passport module
@@ -38,10 +41,15 @@ passport.use(User.createStrategy()); // this is a helper method provided by the 
 passport.serializeUser(User.serializeUser()); // It gets the information from the user object and handles which information has to be store into our session
 passport.deserializeUser(User.deserializeUser()); // It is responsable of getting the correct user information back from our session and then back into the user object. Therefore staying logged in between pages
 
-app.use( (req, res, next) => { // app.use middleware doesn't  have a route as a first parameter, indeed is an action which is used for every request to our application (not like the local variables that we createdin our functions so far). It basically adds a layer which we pass through of each request. We can use app.use to create some middleware for all requests
+// Flash messages
+app.use(flash());
+
+
+app.use( (req, res, next) => { // app.use middleware doesn't  have a route as a first parameter, indeed is an action which is used for every request to our application (not like the local variables that we created in our functions so far). It basically adds a layer which we pass through of each request. We can use app.use to create some middleware for all requests
   // console.log('hello'); // for each action we perform we will get a "hello" string in the console,  even though we will always see a spinning icon at the title of the page if we don't define the next call. This is because a middleware is supposed to be something which we pass through, so it needs a well defined next piece of the middleware in the chain.
   // console.log('current path is ' + req.path); // path is a property of the request that gives us the url
-  res.locals.url = req.path // this will assign the req.path to the locals objects which is on the response (.url is the name we assigned it by our choice). So basically now we can acces this url local in any of our templates of our projects. We can use it for conditional rendering
+  res.locals.url = req.path; // this will assign the req.path to the locals objects which is on the response (.url is the name we assigned it by our choice). So basically now we can acces this url local in any of our templates of our projects. We can use it for conditional rendering
+  res.locals.flash = req.flash(), // this makes the flash functionality available as a variable inside of our templates. This is useful for conditional rendering if there are any messages to show. We can set a flash for any of our functions
   next();
 });
 
