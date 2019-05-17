@@ -70,3 +70,11 @@ exports.logout = (req, res) => {
     req.flash('info', 'You are now logged out'); // this provides a flash message with the key: 'info' and the value: 'You are now logged out' 
     res.redirect('/');
 }
+
+exports.isAdmin = (req, res, next) => {
+    if(req.isAuthenticated() && req.user.isAdmin) { // we want to check that the user is authenticated and if it is an admin at the same time
+        next();
+        return;
+    }
+    res.redirect('/'); // if we are not the admin we are redirected to the home page
+}

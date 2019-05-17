@@ -56,7 +56,8 @@ router.get('/login', hotelController.logIn); // this is for when a user wants to
 // })
 
 // ADMIN Routes
-router.get('/admin', hotelController.adminPage);
+router.get('/admin', userController.isAdmin, hotelController.adminPage); // we want to check before if the authenticated user is an admin for real
+router.get('/admin/*', userController.isAdmin) // it will catch any path with /admin as a root
 router.get('/admin/add', hotelController.createHotelGet);
 router.post('/admin/add', hotelController.upload, hotelController.pushToCloudinary, hotelController.createHotelPost); // this createHotelPost middleware is a post request (the route doesn't change indeed the corresponded action is empty - see add_hotel.pug). we also before passed the file uploader before the second middleware of pushing the image to cloudinary before the last middleware of the chain, the creation of the hotel
 //as soon as we confirm with the button we make a post request from this form to the /admin/add route. in this file we handle this post request in this route. This triggers in the hotelController.js the creareHotelPost function, which then will return the json through res.json, and then it will pass the req.body (it is a request) which stores the data that has been sent by the form. In the end we can see the json version of the 'Hotel' added (the date has the same format of our model).(We made a good job because the form -in the views(client)- has been set up to be the same as our model -in the models(server)- indeed the data is in the correct format). Now we know we have an object for our 'Hotel' stored in request of body (req.body), we will use this data in our model to push to the database (we need to require our 'Hotel? model at the top of our file)

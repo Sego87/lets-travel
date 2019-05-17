@@ -10,12 +10,16 @@ html
         a(href="/")
           img#logo(src="/images/logo.png")
         ul
-          li
-            a(href="/sign-up") sign up
-          li
-            a(href="/login") login
-          li
-            a(href="/logout") logout
+          if !user
+            //- the two buttons below will appear just if the user is not logged in. It will show the logout button if the user is logged in
+            li
+              a(href="/sign-up") sign up
+            li
+              a(href="/login") login
+          else
+            li
+              a(href="/logout") logout (#{user.first_name})
+              //- #{} is for the dinamic data
 
       .search_nav
         form(action="/results" method="POST")
