@@ -127,6 +127,22 @@ exports.myAccount = async (req, res, next) => {
     }
 };
 
+exports.allOrders = async (req, res, next) => { // all this is for the admin to display all the orders. Is pretty much the same of above but in this case we simply don't have to match with a user id,that's why we removed it
+    try {
+        const orders = await Order.aggregate([
+            { $lookup: {
+                from: 'hotels',
+                localField: 'hotel_id',
+                foreignField: '_id',
+                as: 'hotel_data'
+            } }
+        ]);
+        res.render('orders', { title: 'All Orders', orders });
+    } catch (error) {
+        next(error);
+    }
+};
+
 exports.isAdmin = (req, res, next) => {
     if(req.isAuthenticated() && req.user.isAdmin) { // we want to check that the user is authenticated and if it is an admin at the same time
         next();

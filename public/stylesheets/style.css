@@ -113,10 +113,56 @@ textarea {
   margin: 0.5em;
 }
 
+.button {
+  background: cadetblue;
+  border-radius: 5px;
+  padding: 0.5em;
+}
+
 .hotel_order_details {
   background: #eed;
   text-align: center;
   padding: 1em;
+}
+
+.bookings ul {
+  margin: 2em 0;
+  background: cadetblue;
+  padding: 10px;
+}
+
+.bookings li {
+  display: block;
+  background: #eee;
+  padding: 0.5em;
+}
+
+.message {
+  margin: 10px 0;
+  padding: 0.5em;
+  border: 1px solid;
+  border-radius: 5px;
+  font-size: 1.2em;
+}
+
+.close_btn {  
+  float: right;
+}
+
+.close_btn:hover {
+  cursor: pointer;
+}
+
+.message_info {
+  color: rgb(40, 92, 177);
+}
+
+.message_success {
+  color: rgb(39, 87, 39);
+}
+
+.message_error {
+  color: rgb(233, 66, 66);
 }
 
 @media (min-width: 1000px) {
