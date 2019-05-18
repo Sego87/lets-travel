@@ -1,5 +1,6 @@
 extends layout
 include mixins/_hotel.pug
+include mixins/_country_list
 
 block content
 
@@ -7,8 +8,21 @@ block content
     .hotel_wrapper
       h2 Hotels
         a(href="/all") (see all):
-      
-      +hotel
+      ul
+        each hotel in filteredHotels
+          +hotel(hotel)
+
+    .country_wrapper
+      h2 Countries
+        a(href='/countries') (see all)
+      ul
+        each country in filteredCountries
+          +countryList(country._id)
+          //- this is the same of  below but with mixins
+          //- li
+          //-   a(href=`/countries/${country._id}`) #{country._id}
+          //-   //-we need country._id because in the aggregation method we set the unique id in the group stage to be the country, so now inside of our index this _id field is where our country name is now stored. Then we display it as a text next to the link with the #
+          //-   img(src=`/images/countries/${country._id}.jpg`)
       //- with include mixins/_hotel.pug we are telling it to use also the template file _hotel.pug in the folder mixins. with +hotel we are telling it to use the mixin called hotel
 
       

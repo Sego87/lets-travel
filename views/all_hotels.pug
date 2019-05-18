@@ -2,9 +2,12 @@ extends layout
 include mixins/_hotel.pug
 
 block content
-    
+    h2= title
+    each hotel in allHotels
         .hotel_wrapper
-            +hotel
+            +hotel(hotel)
+            //-+hotel(hotel) uses the hotel mixin and passes in the hotel created stored in the database (mixins are compiled to functions which can take arguments)
+            //-p=allHotels[0].hotel_name
 
-        //- p= name
-        //- //- now if the route is /all/Sego87 after the hotel mixin I can read a paragraph Sego87 (check the routing in index.js)
+    //- p= name
+    //- //- now if the route is /all/Sego87 after the hotel mixin I can read a paragraph Sego87 (check the routing in index.js)

@@ -10,13 +10,22 @@ html
         a(href="/")
           img#logo(src="/images/logo.png")
         ul
-          li
-            a(href="/sign-up") sign up
-          li
-            a(href="/login") login
+          if !user
+            //- the two buttons below will appear just if the user is not logged in. It will show the logout button if the user is logged in
+            li
+              a(href="/sign-up") sign up
+            li
+              a(href="/login") login
+          else
+            li
+              a(href="/my-account") my bookings / account
+            li
+              a(href="/logout") logout (#{user.first_name})
+              //- #{} is for the dinamic data
 
       .search_nav
-        form
+        form(action="/results" method="POST")
+          //- when we submit this form we submit it to the /results route, it is a POST method
           .input_wrapper
             label(for="destination") Destination
             input(type="text", id="destination", name="destination" required)
@@ -45,6 +54,17 @@ html
 
           .input_wrapper
             button(type="submit") SEARCH!
+
+      - const values = Object.values(flash)
+      //- this will pass in flash messages which is an object, and use the .values method which returns an array of the object's property values. The values basically are the text strings that we show in the flash messages
+      - const keys = Object.keys(flash)
+      //- the keys are the message types that we want, we are going to create 3 (success, info, error)
+      if keys.length > 0
+        div(class=`message message_${keys}`)
+          span= values
+          span.close_btn(onclick="this.parentNode.remove()") &times;
+          //- this provides a x which the user can click on to then remove the flash message (instead of &times; we could have used a normal x)
+          //- onclick="this.parentNode.remove()" creates an event that when the user clicks on the x it will remove the parent node,IE the div parent, the flash message
 
       img(src="/images/beach.jpg")
 
