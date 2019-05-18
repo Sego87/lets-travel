@@ -43,7 +43,7 @@ mixin hotel(hotel, searchQuery)
                         .input_wrapper
                             button(type="submit") SEARCH!
         
-        if url === '/results'
+        if url === '/results' || url.startsWith('/confirmation/')
             .hotel_order_details
                 p= `Number of nights: ${searchQuery.duration}`
                 p= `Departure date: ${searchQuery.dateOfDeparture}`
@@ -52,4 +52,11 @@ mixin hotel(hotel, searchQuery)
                 - const totalCost = costEach * searchQuery.numberOfGuests
                 p= `Total per person: $ ${costEach}`
                 hr
-                p= `Total cost: $ ${totalCost}`
+                h3= `Total cost: $ ${totalCost}`
+
+                - const query = `id=${hotel._id}&duration=${searchQuery.duration}&dateOfDeparture=${searchQuery.dateOfDeparture}&numberOfGuests=${searchQuery.numberOfGuests}`;
+                if url === '/results'
+                    a.button(href=`/confirmation/${query}`) Continue
+                    //- ${query} contains the information needed for this booking. This query will be a string of name value pairs, the same method that we used earlier in the course when we used the itunes API
+                else if url.startsWith('/confirmation/')
+                    a.button(href=``) Place your order!

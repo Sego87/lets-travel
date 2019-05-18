@@ -1,10 +1,12 @@
 const User = require('../models/user');
+const Hotel = require('../models/hotel'); // we need to require it for the booking confirmation page
 const Passport = require('passport');
 
 // Express validator
 const { check, validationResult } = require('express-validator/check'); // the {} are used to import just a single module of the whole package (in this case we want to use just the check and validationResult modules of the validator package). validationResults runs the validation and stores the validation errors into a result object
 const { sanitize } = require('express-validator/filter');
 
+const querystring = require('querystring'); // node module to parse the json strings
 
 exports.signUpGet = (req, res) => {
     res.render('sign_up', { title: 'User sign up' });
@@ -69,6 +71,18 @@ exports.logout = (req, res) => {
     req.logout(); // we can access the logout method on the request object, which is provided by passport
     req.flash('info', 'You are now logged out'); // this provides a flash message with the key: 'info' and the value: 'You are now logged out' 
     res.redirect('/');
+}
+
+exports.bookingConfirmation = async (req, res, next) => { // remember that we use the async function since we are working with the database
+    try {
+        const data = req.params.data; // first we want to capture the query string from the url
+        const searchData = querystring.parse(data); // we use this method of the querystring node module to parse our json string and display it as a real json data as usual (an object with name value pairs)
+        const hotel = await Hotel.find( {_id: searchData.id} ); // Now it is clearer why we put mongoose.Schema.Types.ObjectId asa type of the hotel_id in the Order model
+        res.render('confirmation', {title: 'Confirm your booking', hotel, searchData }); // we pass in the information of the hotel and also the inputs from  the user
+        // res.json(searchData); // if we use res.json(data) we get a string, not a real json file with objects displayed
+    } catch (error) {
+        next(error)
+    }
 }
 
 exports.isAdmin = (req, res, next) => {

@@ -78,6 +78,7 @@ router.post('/sign-up', userController.signUpPost, userController.loginPost); //
 router.get('/login', userController.loginGet);
 router.post('/login', userController.loginPost);
 router.get('/logout', userController.logout);
+router.get('/confirmation/:data', userController.bookingConfirmation); // we use the dynamic :data to access the query string in the user controller (check the user controller)
 
 // after installing nodemon it will appear as a new devDependency in the package.json
 // in order to make nodemon work I create a new script in package.json right below "start" and I call it "devstart", then the related command is "nodemon ./bin/www"
