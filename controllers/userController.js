@@ -78,7 +78,7 @@ exports.bookingConfirmation = async (req, res, next) => { // remember that we us
     try {
         const data = req.params.data; // first we want to capture the query string from the url
         const searchData = querystring.parse(data); // we use this method of the querystring node module to parse our json string and display it as a real json data as usual (an object with name value pairs)
-        const hotel = await Hotel.find( {_id: searchData.id} ); // Now it is clearer why we put mongoose.Schema.Types.ObjectId asa type of the hotel_id in the Order model
+        const hotel = await Hotel.find( {_id: searchData.id} ); // Now it is clearer why we put mongoose.Schema.Types.ObjectId asa type of the hotel_id in the Order model. Wewant to retreive the _id of the hotel in the database that corresponds to the id of the searchData that we defined in the hotel mixin when we said id={hotel._id} in the url ofthe browser, with hotel._id which is the id ofthe hotel in the database
         res.render('confirmation', {title: 'Confirm your booking', hotel, searchData }); // we pass in the information of the hotel and also the inputs from  the user
         // res.json(searchData); // if we use res.json(data) we get a string, not a real json file with objects displayed
     } catch (error) {
@@ -90,6 +90,7 @@ exports.orderPlaced = async (req, res, next) => {
     try {
         const data = req.params.data;
         const parsedData = querystring.parse(data);
+        // res.json(parsedData);
         const order = new Order({
             user_id: req.user._id,
             hotel_id: parsedData.id,
