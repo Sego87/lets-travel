@@ -108,6 +108,25 @@ exports.orderPlaced = async (req, res, next) => {
     }
 };
 
+exports.myAccount = async (req, res, next) => {
+    try {
+        const orders = await Order.aggregate([
+            { $match: { user_id: req.user.id } }, // this grabs any record wherethe user_id matches the current logged in user
+            { $lookup: { // we use this method because we are in the users collection but we want to move to the hotels collection to return to the user the actual name of the hotel instead of its id which for the user means nothing
+                from: 'hotels',
+                localField: 'hotel_id', // localField is the field name from our orders collection, which is basically considered the input. hotel_id indeed is in our order.js file
+                foreignField: '_id', // this is the field from the hotels collections which we want to match to. Thishotel data we want to match to will be added to our orders as an array. Now we are going to give this array a name of our choice such as 'hotel_data'
+                as: 'hotel_data'
+            } }
+        ]); // now in the res.json(orders) we will see a new field called 'hotel_data' which is grabbing all of the information from the upper hotel_id stored in the orders collection. So basically we retreive the whole hotel information from the hotel_id string grabbed in orders collection.So now we can use all the gotten hotel data inside of our template
+        // const orders = await Order.find({ user_id: req.user._id }); // we want to match the user_id to the information from the req.user._id. This line has been replaced by the new const orders above
+        // res.json(orders);
+        res.render('user_account', { title: 'My Account', orders });
+    } catch (error) {
+        next(error);
+    }
+};
+
 exports.isAdmin = (req, res, next) => {
     if(req.isAuthenticated() && req.user.isAdmin) { // we want to check that the user is authenticated and if it is an admin at the same time
         next();
