@@ -5,6 +5,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose'); // we are requiring our mongoose package from the node_modules folder (we can require it just typing its name instead of writing the whole path). So now we have access to mongoose.
+const compression = require('compression');
+const helmet = require('helmet');
 
 var indexRouter = require('./routes/index');
 
@@ -20,6 +22,9 @@ const User = require('./models/user'); // we require the User schema
 const passport = require('passport');// we require the passport module
 
 var app = express();
+app.use(helmet());
+// compress responses
+app.use(compression());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
