@@ -59,4 +59,9 @@ mixin hotel(hotel, searchQuery)
                     a.button(href=`/confirmation/${query}`) Continue
                     //- ${query} contains the information needed for this booking. This query will be a string of name value pairs, the same method that we used earlier in the course when we used the itunes API
                 else if url.startsWith('/confirmation/')
-                    a.button(href=``) Place your order!
+                    if user
+                        //-if the user is logged in, it will display the part below
+                        a.button(href=`/order-placed/${query}`) Place your order!
+                    else
+                        a.button(href=`/login`) Please log in to order!
+                        //- we could improve this maintaining the user inputs after the login so he can go ahead without writing again all the fields

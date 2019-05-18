@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const Hotel = require('../models/hotel'); // we need to require it for the booking confirmation page
+const Order = require('../models/order');
 const Passport = require('passport');
 
 // Express validator
@@ -10,7 +11,7 @@ const querystring = require('querystring'); // node module to parse the json str
 
 exports.signUpGet = (req, res) => {
     res.render('sign_up', { title: 'User sign up' });
-}
+};
 
 exports.signUpPost = [ // We need validation and sanitization. Validation makes us sure that the user entered values in the correct format (similar to the models we createdfor the hotels and the users, such as respecting minimum number of characters, hyphenom data, if the passwordmatches and so on..). Sanitization is the process that removes and replaces characters entered into the input fields which maybe used to send malicious data to the server. Express-validator contains modules to accomplish both of these tasks    // Validate user data
     check('first_name').isLength({ min: 1 }).withMessage('First name must be specified') // with the isLength validator method we want to check if we have at least 1 character in our first_name. Then we passed in an error message string in case no characters have been entered
@@ -54,11 +55,11 @@ exports.signUpPost = [ // We need validation and sanitization. Validation makes 
             });
         }
     }
-]
+];
 
 exports.loginGet = (req,res) => {
     res.render('login', { title: 'Login to continue' });
-}
+};
 
 exports.loginPost = Passport.authenticate('local', { // authenticate is a method from the passport module. The first argument is the local strategy to handle the login request. The second argument is an option object. The first option redirects the user when the login has been succesful, the second one if unseccesful unseccesful.
     successRedirect: '/',
@@ -71,7 +72,7 @@ exports.logout = (req, res) => {
     req.logout(); // we can access the logout method on the request object, which is provided by passport
     req.flash('info', 'You are now logged out'); // this provides a flash message with the key: 'info' and the value: 'You are now logged out' 
     res.redirect('/');
-}
+};
 
 exports.bookingConfirmation = async (req, res, next) => { // remember that we use the async function since we are working with the database
     try {
@@ -83,7 +84,28 @@ exports.bookingConfirmation = async (req, res, next) => { // remember that we us
     } catch (error) {
         next(error)
     }
-}
+};
+
+exports.orderPlaced = async (req, res, next) => {
+    try {
+        const data = req.params.data;
+        const parsedData = querystring.parse(data);
+        const order = new Order({
+            user_id: req.user._id,
+            hotel_id: parsedData.id,
+            order_details: {
+                duration: parsedData.duration,
+                dateOfDeparture: parsedData.dateOfDeparture,
+                numberOfGuests: parsedData.numberOfGuests
+            }
+        });
+        await order.save();
+        req.flash('info', 'Thank you, your order has been placed!');
+        res.redirect('/my-account');
+    } catch(error) {
+        next(error);
+    }
+};
 
 exports.isAdmin = (req, res, next) => {
     if(req.isAuthenticated() && req.user.isAdmin) { // we want to check that the user is authenticated and if it is an admin at the same time
@@ -91,4 +113,4 @@ exports.isAdmin = (req, res, next) => {
         return;
     }
     res.redirect('/'); // if we are not the admin we are redirected to the home page
-}
+};
