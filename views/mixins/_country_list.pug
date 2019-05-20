@@ -2,5 +2,6 @@ mixin countryList(country)
 
     li
         a(href=`/countries/${country}`) #{country}
-            img(src=`/images/countries/${country}.jpg`)
+            - const countryLowerCase = country.toLowerCase()
+            img(src=`/images/countries/${countryLowerCase}.jpg`)
         //- #{country} is to output our dynamic countries
