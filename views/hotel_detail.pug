@@ -5,11 +5,8 @@ block content
     each hotel in hotelData
         .hotel
             if url.startsWith('/admin')
-                //- url is the name of the local variable we created in app.use which we pass through all of our templates. startWith is a regular Javascript method which will be true if we pass in a string inside the brackets which matches the beginning of the url 
                 a(href=`${hotel._id}/update`)
                     button(class="button_small") Update Hotel
                 a(href=`${hotel._id}/delete`)
                     button(class="button_small") Delete Hotel
-                //- basically now if the url is'/admin' it will display the buttons, otherwise not. They are conditionally rendered
-            //- I want to redirect pressing the buttons so I can update the hotel details or directly remove the hotel in the new route. In the new route will appear the hotel id
             +hotel(hotel)

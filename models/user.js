@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-userSchema.plugin(mongooseBcrypt); // we need to add our userSchema to the plugin in order to use it. We can add the bcrypt option to our schema password field, we do this by adding bcrypt:true to the schema password field
-userSchema.plugin(passportLocalMongoose, { usernameField: 'email' }); // we need to add our userSchema to the plugin in order to use it. The second parameter is an option object, check the documentation on the internet (using 'email' we are saying that we want to use the entered email as username of the user-by default it would look for the field called username, which we don't have-)
+userSchema.plugin(mongooseBcrypt);
+userSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
 
 module.exports = mongoose.model('User',  userSchema);

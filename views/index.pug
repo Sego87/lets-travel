@@ -18,28 +18,3 @@ block content
       ul
         each country in filteredCountries
           +countryList(country._id)
-          //- this is the same of  below but with mixins
-          //- li
-          //-   a(href=`/countries/${country._id}`) #{country._id}
-          //-   //-we need country._id because in the aggregation method we set the unique id in the group stage to be the country, so now inside of our index this _id field is where our country name is now stored. Then we display it as a text next to the link with the #
-          //-   img(src=`/images/countries/${country._id}.jpg`)
-      //- with include mixins/_hotel.pug we are telling it to use also the template file _hotel.pug in the folder mixins. with +hotel we are telling it to use the mixin called hotel
-
-      
-
-  //- h1= title
-  //- //- the content of title has been taken from the index.js in- res.render('index', { title: 'Express' }); -so when you put a = after the name of the html tag you are using javascript
-  //- p Welcome to let's travel
-  //- img(src="images/beach.jpg")
-
-  //- - const name = "Mike"
-  //- - const foods = ["cheese", "eggs", "chicken"]
-
-  //- div
-  //-   h1 Title
-  //-   h2= name
-  //-   a(href="https://www.google.com" class="button") Link to Google
-    
-  //-   ul
-  //-     each food in foods
-  //-       li= "I love " + food

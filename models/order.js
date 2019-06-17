@@ -6,7 +6,7 @@ const orderSchema = new mongoose.Schema({
         required: true
     },
     hotel_id: {
-        type: mongoose.Schema.Types.ObjectId, // we need to retreive the rest of the info of the hotel from the database. ObjectId will allow us to correctly compare this id to the one which is stored in the database
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
     order_details: {
@@ -15,5 +15,4 @@ const orderSchema = new mongoose.Schema({
     }
 });
 
-// Export model
 module.exports = mongoose.model('Order', orderSchema);

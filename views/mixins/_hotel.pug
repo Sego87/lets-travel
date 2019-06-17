@@ -1,21 +1,16 @@
 mixin hotel(hotel, searchQuery)
-    //-with hotel(hotel) we named the mixin hotel and passed in the hotel data for each hotel from the database
 
     .hotel
         .hotel_img
             a(href=`/all/${hotel._id}`)
-                //- `/all/${hereGoesTheDynamicSection}`
-                //- img(src=`/images/hotels/${hotel.image}`) this was before uploading the images to the cloud
                 img(src=`http://res.cloudinary.com/magicmike87/image/upload/${hotel.image}.jpg`)
         .hotel_info
             a(href=`/all/${hotel._id}`)
                 h3=hotel.hotel_name
-            //-h3 Hotel 1 this is a static data
             hr
             if url.startsWith('/all/')
                 p=hotel.hotel_description
                 hr
-                //- the description and the horizontal line will be rendered just if we are in the '/all/' url. Note that they will be rendered just in the hotel detail page and not when all hotels are shown.In index.js we have '/all' and '/all/:hotel', which are not the same thing indeed.
             p= `Star rating: ${hotel.star_rating}`
             p= `Country: ${hotel.country}`
             p= `Cost per night: $ ${hotel.cost_per_night}`
@@ -25,11 +20,9 @@ mixin hotel(hotel, searchQuery)
                 h3 Search for this hotel
                 .search_nav
                     form(action="/results" method="POST")
-                        //- when we submit this form we submit it to the /results route, it is a POST method
                         .input_wrapper
                             label(for="destination") Destination
                             input(type="text", id="destination", name="destination" value=hotel.hotel_name)
-                            //- value=hotel.hotel_name is because the user doesn't need to do a specific search for a hotel since it is already in the detail page of the desired hotel, so this field it doesn't have to be required. It is just alredy filled in with the current hotel_name of the shown hotel
                         .input_wrapper
                             label(for="duration") Duration (nights)
                             input(type="number", id="duration", name="duration" required)
@@ -48,7 +41,6 @@ mixin hotel(hotel, searchQuery)
                 p= `Number of nights: ${searchQuery.duration}`
                 p= `Departure date: ${searchQuery.dateOfDeparture}`
                 - const costEach = searchQuery.duration * hotel.cost_per_night
-                //-the duration is stored in searchQuery while the cost_per_night is stored in the hotel object in the database (cost_per_night is not an input from the user indeed)
                 - const totalCost = costEach * searchQuery.numberOfGuests
                 p= `Total per person: $ ${costEach}`
                 hr
@@ -57,11 +49,8 @@ mixin hotel(hotel, searchQuery)
                 - const query = `id=${hotel._id}&duration=${searchQuery.duration}&dateOfDeparture=${searchQuery.dateOfDeparture}&numberOfGuests=${searchQuery.numberOfGuests}`;
                 if url === '/results'
                     a.button(href=`/confirmation/${query}`) Continue
-                    //- ${query} contains the information needed for this booking. This query will be a string of name value pairs, the same method that we used earlier in the course when we used the itunes API
                 else if url.startsWith('/confirmation/')
                     if user
-                        //-if the user is logged in, it will display the part below
                         a.button(href=`/order-placed/${query}`) Place your order!
                     else
                         a.button(href=`/login`) Please log in to order!
-                        //- we could improve this maintaining the user inputs after the login so he can go ahead without writing again all the fields
