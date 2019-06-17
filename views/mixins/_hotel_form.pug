@@ -1,16 +1,11 @@
 mixin hotelForm(hotel={})
-    //-we have just set the hotel initially as an empty object because it was returning us all the time an error in the route /admin/add because the update and create handlers in the hotelController render the same template (still to be understood, I have to check the documentation)
-    //- this form is set up to make a POST request. This will post our data so we can use it in our controller. The action is empty, so this it will post our data to the current route (in this case '/admin/add').
     form(action="" method="POST" enctype="multipart/form-data")
-        //- enctype="multipart/form-data" allows also our img to be part of our post request (without it, the input file type indicates just the path of the file, not the real file itself). It requires the installation of the package called multer
         .form_input
             label(for="hotel_name") Hotel name:
             input(type="text" name="hotel_name" required value=hotel.hotel_name)
-            //-with value=hotel.hotel_name we want that the field is filled in with its original values, default values
         .form_input
             label(for="hotel_description") Hotel description:
             textarea(name="hotel_description" id="hotel_description" cols="30" rows="10" required)=hotel.hotel_description
-            //- different syntax because this is a textarea but same concept of above
         .form_input
             label(for="image") Hotel image
             input(type="file" name="image" id="image")
